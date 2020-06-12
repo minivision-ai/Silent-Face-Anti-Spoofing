@@ -1,20 +1,31 @@
-# -*- coding:utf-8 -*-
+# -*- coding: utf-8 -*-
+# @Time : 20-6-3 下午4:45
+# @Author : zhuying
+# @Company : Minivision
+# @File : MobileFaceNet_pruned.py
+# @Software : PyCharm
 
+from torch.nn import Linear, Conv2d, BatchNorm1d, BatchNorm2d, PReLU, Sequential, Module
 import torch
-import torch.nn as nn
+import torch.nn.functional as F
 
 
-class Flatten(nn.Module):
+class L2Norm(Module):
+    def forward(self, input):
+        return F.normalize(input)
+
+
+class Flatten(Module):
     def forward(self, input):
         return input.view(input.size(0), -1)
 
 
-class Conv_block(nn.Module):
+class Conv_block(Module):
     def __init__(self, in_c, out_c, kernel=(1, 1), stride=(1, 1), padding=(0, 0), groups=1):
         super(Conv_block, self).__init__()
-        self.conv = nn.Conv2d(in_c, out_c, kernel_size=kernel, groups=groups, stride=stride, padding=padding, bias=False)
-        self.bn = nn.BatchNorm2d(out_c)
-        self.prelu = nn.PReLU(out_c)
+        self.conv = Conv2d(in_c, out_c, kernel_size=kernel, groups=groups, stride=stride, padding=padding, bias=False)
+        self.bn = BatchNorm2d(out_c)
+        self.prelu = PReLU(out_c)
 
     def forward(self, x):
         x = self.conv(x)
@@ -23,12 +34,24 @@ class Conv_block(nn.Module):
         return x
 
 
-class Linear_block(nn.Module):
+class Conv_block_no_bn(Module):
+    def __init__(self, in_c, out_c, kernel=(1, 1), stride=(1, 1), padding=(0, 0), groups=1):
+        super(Conv_block_no_bn, self).__init__()
+        self.conv = Conv2d(in_c, out_channels=out_c, kernel_size=kernel, groups=groups, stride=stride, padding=padding, bias=False)
+        self.prelu = PReLU(out_c)
+
+    def forward(self, x):
+        x = self.conv(x)
+        x = self.prelu(x)
+        return x
+
+
+class Linear_block(Module):
     def __init__(self, in_c, out_c, kernel=(1, 1), stride=(1, 1), padding=(0, 0), groups=1):
         super(Linear_block, self).__init__()
-        self.conv = nn.Conv2d(in_c, out_channels=out_c, kernel_size=kernel,
+        self.conv = Conv2d(in_c, out_channels=out_c, kernel_size=kernel,
                            groups=groups, stride=stride, padding=padding, bias=False)
-        self.bn = nn.BatchNorm2d(out_c)
+        self.bn = BatchNorm2d(out_c)
 
     def forward(self, x):
         x = self.conv(x)
@@ -36,8 +59,8 @@ class Linear_block(nn.Module):
         return x
 
 
-class Depth_Wise(nn.Module):
-    def __init__(self, c1, c2, c3, residual=False, kernel=(3, 3), stride=(2, 2), padding=(1, 1), groups=1):
+class Depth_Wise(Module):
+     def __init__(self, c1, c2, c3, residual=False, kernel=(3, 3), stride=(2, 2), padding=(1, 1), groups=1):
         super(Depth_Wise, self).__init__()
         c1_in, c1_out = c1
         c2_in, c2_out = c2
@@ -47,7 +70,7 @@ class Depth_Wise(nn.Module):
         self.project = Linear_block(c3_in, c3_out, kernel=(1, 1), padding=(0, 0), stride=(1, 1))
         self.residual = residual
 
-    def forward(self, x):
+     def forward(self, x):
         if self.residual:
             short_cut = x
         x = self.conv(x)
@@ -60,7 +83,7 @@ class Depth_Wise(nn.Module):
         return output
 
 
-class Residual(nn.Module):
+class Residual(Module):
     def __init__(self, c1, c2, c3, num_block, groups, kernel=(3, 3), stride=(1, 1), padding=(1, 1)):
         super(Residual, self).__init__()
         modules = []
@@ -69,19 +92,19 @@ class Residual(nn.Module):
             c2_tuple = c2[i]
             c3_tuple = c3[i]
             modules.append(Depth_Wise(c1_tuple, c2_tuple, c3_tuple, residual=True, kernel=kernel, padding=padding, stride=stride, groups=groups))
-        self.model = nn.Sequential(*modules)
+        self.model = Sequential(*modules)
 
     def forward(self, x):
         return self.model(x)
 
 
-class MobileFaceNet(nn.Module):
-    def __init__(self, keep, embedding_size, conv6_kernel=(7, 7), drop_p=0.75, num_classes=4):
+class MobileFaceNet(Module):
+    def __init__(self, keep, embedding_size, conv6_kernel=(7, 7), p=1, drop_p=0.75, num_classes=4, img_channel=3):
         super(MobileFaceNet, self).__init__()
-
+        # Focal Loss
         self.embedding_size = embedding_size
 
-        self.conv1 = Conv_block(3, keep[0], kernel=(3, 3), stride=(2, 2), padding=(1, 1))
+        self.conv1 = Conv_block(img_channel, keep[0], kernel=(3, 3), stride=(2, 2), padding=(1, 1))
         self.conv2_dw = Conv_block(keep[0], keep[1], kernel=(3, 3), stride=(1, 1), padding=(1, 1), groups=keep[1])
 
         c1 = [(keep[1], keep[2])]
@@ -115,10 +138,10 @@ class MobileFaceNet(nn.Module):
         self.conv_6_sep = Conv_block(keep[46], keep[47], kernel=(1, 1), stride=(1, 1), padding=(0, 0))
         self.conv_6_dw = Linear_block(keep[47], keep[48], groups=keep[48], kernel=conv6_kernel, stride=(1, 1), padding=(0, 0))
         self.conv_6_flatten = Flatten()
-        self.linear = nn.Linear(512, embedding_size, bias=False)
-        self.bn = nn.BatchNorm1d(embedding_size)
+        self.linear = Linear(int(512*p), embedding_size, bias=False)
+        self.bn = BatchNorm1d(embedding_size)
         self.drop = torch.nn.Dropout(p=drop_p)
-        self.prob = nn.Linear(embedding_size, num_classes, bias=False)
+        self.prob = Linear(embedding_size, num_classes, bias=False)
 
     def forward(self, x):
         out = self.conv1(x)
@@ -132,37 +155,54 @@ class MobileFaceNet(nn.Module):
         out = self.conv_6_sep(out)
         out = self.conv_6_dw(out)
         out = self.conv_6_flatten(out)
-        out = self.linear(out)
+        # out = self.linear(out)
+        if self.embedding_size != 512:
+            out = self.linear(out)
         out = self.bn(out)
         out = self.drop(out)
         out = self.prob(out)
-
         return out
 
 
-keep_dict = {
+keep_dict = {'1.8M': [32, 32, 103, 103, 64, 13, 13, 64, 26, 26,
+                          64, 13, 13, 64, 52, 52, 64, 231, 231, 128,
+                          154, 154, 128, 52, 52, 128, 26, 26, 128, 52,
+                          52, 128, 26, 26, 128, 26, 26, 128, 308, 308,
+                          128, 26, 26, 128, 26, 26, 128, 512, 512],
+             '1.2M': [13, 13, 77, 77, 64, 13, 13, 64, 13, 13, 64,
+                      13, 13, 64, 13, 13, 64, 180, 180, 128, 26,
+                      26, 128, 26, 26, 128, 26, 26, 128, 26, 26,
+                      128, 26, 26, 128, 26, 26, 128, 52, 52, 128,
+                      26, 26, 128, 26, 26, 128, 512, 512],
+             '1.2M_': [13, 13, 77, 77, 64, 13, 13, 64, 13, 13, 64, 13,
+                       13, 64, 13, 13, 64, 154, 154, 128, 26, 26, 128, 26,
+                       26, 128, 26, 26, 128, 26, 26, 128, 26, 26, 128, 26, 26,
+                       128, 103, 103, 128, 26, 26, 128, 26, 26, 128, 512, 512],
+             '1.8M_': [32, 32, 103, 103, 64, 13, 13, 64, 13, 13, 64, 13,
+                       13, 64, 13, 13, 64, 231, 231, 128, 231, 231, 128, 52,
+                       52, 128, 26, 26, 128, 77, 77, 128, 26, 26, 128, 26, 26,
+                       128, 308, 308, 128, 26, 26, 128, 26, 26, 128, 512, 512]}
 
-    'MobileFaceNetPv2': [13, 13, 77, 77, 64, 13, 13, 64, 13, 13, 64,
-                         13, 13, 64, 13, 13, 64, 180, 180, 128, 26,
-                         26, 128, 26, 26, 128, 26, 26, 128, 26, 26,
-                         128, 26, 26, 128, 26, 26, 128, 52, 52, 128,
-                         26, 26, 128, 26, 26, 128, 512, 512],
-    'MobileFaceNetPv3': [13, 13, 77, 77, 64, 13, 13, 64, 13, 13, 64, 13,
-                         13, 64, 13, 13, 64, 154, 154, 128, 26, 26, 128, 26,
-                         26, 128, 26, 26, 128, 26, 26, 128, 26, 26, 128, 26, 26,
-                         128, 103, 103, 128, 26, 26, 128, 26, 26, 128, 512, 512],
-}
+
+# (80x80) flops: 0.044, params: 0.41
+def MobileFaceNetPv1(embedding_size=128, conv6_kernel=(7, 7), p=1, drop_p=0.75, num_classes=3, img_channel=3):
+
+    return MobileFaceNet(keep_dict['1.8M'], embedding_size, conv6_kernel, p, drop_p, num_classes, img_channel)
 
 
-def get_model(model_name, embedding_size, conv6_kernel=(5, 5), drop_p=0.75, num_classes=3):
+# (80x80) flops: 0.024, params: 0.27
+def MobileFaceNetPv2(embedding_size=128, conv6_kernel=(7, 7), p=1, drop_p=0.75, num_classes=3, img_channel=3):
 
-    model = MobileFaceNet(keep_dict[model_name], embedding_size, conv6_kernel, drop_p, num_classes)
-
-    return model
+    return MobileFaceNet(keep_dict['1.2M'], embedding_size, conv6_kernel, p, drop_p, num_classes, img_channel)
 
 
-if __name__ == '__main__':
+# (80x80) flops: 0.024, params: 0.28
+def MobileFaceNetPv3(embedding_size=128, conv6_kernel=(7, 7), p=1, drop_p=0.75, num_classes=3, img_channel=3):
 
-    model = get_model('MobileFaceNetPv2', 128, (5, 5))
+    return MobileFaceNet(keep_dict['1.2M_'], embedding_size, conv6_kernel, p, drop_p, num_classes, img_channel)
 
-    print(model)
+# (80x80) flops: 0.044, params: 0.43
+def MobileFaceNetPv4(embedding_size=128, conv6_kernel=(7, 7), p=1, drop_p=0.75, num_classes=3, img_channel=3):
+
+    return MobileFaceNet(keep_dict['1.8M_'], embedding_size, conv6_kernel, p, drop_p, num_classes, img_channel)
+

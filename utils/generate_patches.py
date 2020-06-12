@@ -1,4 +1,3 @@
-
 """
 原始图片生成训练patch
 根据人脸bbox坐标，计算仿射变换矩阵的参数，生成相应的patch
@@ -8,7 +7,7 @@ import cv2
 import numpy as np
 
 
-class Affine_Crop():
+class AffineCrop():
 
     def __init__(self, bbox, width, height, scale=1., shift_ratio_x=0., shift_ratio_y=0.):
 
@@ -70,27 +69,30 @@ class Affine_Crop():
 
         return int(left_top_x), int(left_top_y), int(right_bottom_x), int(right_bottom_y)
 
-    def crop(self, org_img):
+    def crop(self, org_img, crop=True):
+        if not crop:
+            dst_img = cv2.resize(org_img, (self.width, self.height))
+        else:
+            h, w, _ = np.shape(org_img)
 
-        h, w, _ = np.shape(org_img)
+            left_top_x, left_top_y, right_bottom_x, right_bottom_y = self.get_new_box(w, h)
 
-        left_top_x, left_top_y, right_bottom_x, right_bottom_y = self.get_new_box(w, h)
+            img = org_img[left_top_y: right_bottom_y, left_top_x: right_bottom_x]
 
-        img = org_img[left_top_y: right_bottom_y, left_top_x: right_bottom_x]
-
-        dst_img = cv2.resize(img, (self.width, self.height))
+            dst_img = cv2.resize(img, (self.width, self.height))
 
         return dst_img
 
 
 if "__main__" == __name__:
 
-    root_path = ''
-    save_root_path = ''
-    landmark_file_path = ''
+    root_path = '/home/liuzhicai/ssd/data/recognize_data/LiveBody/Train/Train_set'
+    save_root_path = '/home/liuzhicai/ssd/data/recognize_data/LiveBody/Train/new_patchs'
+    landmark_file_path = '/home/liuzhicai/ssd/data/recognize_data/LiveBody/Train/new_patchs/landmarks/1_realFace-finance-200518_landmark_result.txt'
     f = open(landmark_file_path, 'r')
     lines = f.readlines()
 
+    # patch_list = ['1_0_0_80x80', '2.7_0_0_80x80', '2.7_0.1_0_80x80', '2.7_0.2_0.1_80x80', '4_0_0_80x80']
     patch_list = ['1_0_0_80x80', '2.7_0_0_80x80', '4_0_0_80x80', '2.7_0.1_0_80x80', '2.7_0.2_0.1_80x80']
 
     for patch in patch_list:
@@ -113,7 +115,7 @@ if "__main__" == __name__:
 
             bbox = [int(list_[1]), int(list_[2]), int(list_[3]), int(list_[4])]
 
-            g = Affine_Crop(bbox, int(width_), int(height_), float(scale_), float(shift_x), float(shift_y))
+            g = AffineCrop(bbox, int(width_), int(height_), float(scale_), float(shift_x), float(shift_y))
             img = g.crop(img)
             img_save_path = os.path.join(save_path, list_[0])
             parent_path = os.path.dirname(img_save_path)
