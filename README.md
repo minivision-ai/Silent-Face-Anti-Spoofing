@@ -39,7 +39,10 @@ cd Silent-Face-Anti-Spoofing
 device_ids:选择GPU，可以为多个，比如0123
 train_set:训练集的名称
 patch_info:选择用于训练的patch
-##测试
+## 测试
+ 将待测试图片放入images文件夹
 `python test.py --image_name “ ”`
+ image_name:待测试图片的名称 xxx.jpg
+
  
 ## 技术交流  
