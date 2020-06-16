@@ -14,9 +14,9 @@ def opencv_loader(path):
     return img
 
 
-class DatasetFolderMulti(datasets.ImageFolder):
+class DatasetFolderFT(datasets.ImageFolder):
     def __init__(self, root, ft_root, transform=None, target_transform=None, ft_width=10, ft_height=10, loader=opencv_loader):
-        super(DatasetFolderMulti, self).__init__(root, transform, target_transform, loader)
+        super(DatasetFolderFT, self).__init__(root, transform, target_transform, loader)
         self.root = root
         self.ft_root = ft_root
         self.ft_width = ft_width
@@ -25,7 +25,7 @@ class DatasetFolderMulti(datasets.ImageFolder):
     def __getitem__(self, index):
         path, target = self.samples[index]
         sample = self.loader(path)
-
+        # get the FT picture of the sample
         ft_path = path.replace(self.root, self.ft_root)
         ft_sample = self.loader(ft_path)
         if sample is None:

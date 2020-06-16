@@ -5,8 +5,8 @@
 # @File : dataset_loader.py
 # @Software : PyCharm
 from torch.utils.data import DataLoader
-from utils.dataset_folder import opencv_loader, DatasetFolderMulti
-from utils import transform as trans
+from src.dataset_folder import opencv_loader, DatasetFolderFT
+from src import transform as trans
 from torchvision import datasets
 
 
@@ -43,7 +43,7 @@ def get_train_loader(conf):
         trans.ToTensor()
     ])
     root_path = '{}/{}'.format(conf.train_root_path, conf.patch_info)
-    trainset = DatasetFolderMulti(root_path, conf.ft_root, train_transform, None, conf.ft_width, conf.ft_height)
+    trainset = DatasetFolderFT(root_path, conf.ft_root, train_transform, None, conf.ft_width, conf.ft_height)
     train_loader = DataLoader(
         trainset,
         batch_size=conf.batch_size,

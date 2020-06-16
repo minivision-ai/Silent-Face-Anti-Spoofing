@@ -2,7 +2,6 @@
 原始图片生成训练patch
 根据人脸bbox坐标，计算仿射变换矩阵的参数，生成相应的patch
 """
-import os
 import cv2
 import numpy as np
 
@@ -18,11 +17,11 @@ class AffineCrop():
         self.shift_ratio_x = shift_ratio_x
         self.shift_ratio_y = shift_ratio_y
 
-    def get_center(self, x, y, width, height):
+    def _get_center(self, x, y, width, height):
 
         return width / 2 + x, height / 2 + y
 
-    def get_new_box(self, src_w, src_h):
+    def _get_new_box(self, src_w, src_h):
 
         x = self.bbox[0]
         y = self.bbox[1]
@@ -37,7 +36,7 @@ class AffineCrop():
         new_width = box_w * self.scale
         new_height = box_h * self.scale
 
-        center_x, center_y = self.get_center(x, y, box_w, box_h)
+        center_x, center_y = self._get_center(x, y, box_w, box_h)
 
         left_top_x = center_x - new_width / 2 + shift_x
         left_top_y = center_y - new_height / 2 + shift_y
@@ -75,7 +74,7 @@ class AffineCrop():
         else:
             h, w, _ = np.shape(org_img)
 
-            left_top_x, left_top_y, right_bottom_x, right_bottom_y = self.get_new_box(w, h)
+            left_top_x, left_top_y, right_bottom_x, right_bottom_y = self._get_new_box(w, h)
 
             img = org_img[left_top_y: right_bottom_y, left_top_x: right_bottom_x]
 
@@ -83,46 +82,6 @@ class AffineCrop():
 
         return dst_img
 
-
-if "__main__" == __name__:
-
-    root_path = '/home/liuzhicai/ssd/data/recognize_data/LiveBody/Train/Train_set'
-    save_root_path = '/home/liuzhicai/ssd/data/recognize_data/LiveBody/Train/new_patchs'
-    landmark_file_path = '/home/liuzhicai/ssd/data/recognize_data/LiveBody/Train/new_patchs/landmarks/1_realFace-finance-200518_landmark_result.txt'
-    f = open(landmark_file_path, 'r')
-    lines = f.readlines()
-
-    # patch_list = ['1_0_0_80x80', '2.7_0_0_80x80', '2.7_0.1_0_80x80', '2.7_0.2_0.1_80x80', '4_0_0_80x80']
-    patch_list = ['1_0_0_80x80', '2.7_0_0_80x80', '4_0_0_80x80', '2.7_0.1_0_80x80', '2.7_0.2_0.1_80x80']
-
-    for patch in patch_list:
-
-        scale_, shift_x, shift_y, area = patch.split('_')
-
-        height_, width_ = area.split('x')
-
-        save_path = os.path.join(save_root_path, patch)
-
-        for line in lines:
-
-            list_ = line.split(' ')
-
-            if len(list_) != 16:
-                print(line)
-                continue
-
-            img = cv2.imread(os.path.join(root_path, list_[0]))
-
-            bbox = [int(list_[1]), int(list_[2]), int(list_[3]), int(list_[4])]
-
-            g = AffineCrop(bbox, int(width_), int(height_), float(scale_), float(shift_x), float(shift_y))
-            img = g.crop(img)
-            img_save_path = os.path.join(save_path, list_[0])
-            parent_path = os.path.dirname(img_save_path)
-            if not os.path.isdir(parent_path):
-                print(parent_path)
-                os.makedirs(parent_path)
-            cv2.imwrite(img_save_path, img)
 
 
 

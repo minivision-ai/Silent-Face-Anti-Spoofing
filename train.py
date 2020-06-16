@@ -6,7 +6,7 @@
 # @Software : PyCharm
 import argparse
 import os
-from utils.default_config import get_default_config, update_config
+from src.default_config import get_default_config, update_config
 from train_fas import TrainFAS
 
 

@@ -9,13 +9,10 @@
 default config for training and test
 
 """
-import os
 import torch
-import shutil
-from pathlib import Path
 from datetime import datetime
 from easydict import EasyDict
-from utils.utility import make_if_not_exist
+from src.utility import make_if_not_exist
 
 def get_default_config():
 
@@ -23,11 +20,11 @@ def get_default_config():
 
     # ----------------------training---------------
     conf.schedule_lr_type = "MSTEP"#warmup
-    conf.lr = 1e-3
+    conf.lr = 1e-1
     # [9, 13, 15]
-    conf.milestones = [6, 10, 12]  # down learing rate
+    conf.milestones = [24, 40, 48]  # down learing rate
     conf.gamma = 0.1
-    conf.epochs =15
+    conf.epochs =60
     conf.momentum = 0.9
     conf.batch_size = 1024
 

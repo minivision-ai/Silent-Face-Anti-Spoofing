@@ -2,7 +2,7 @@
 # @Time : 20-6-3 下午4:45
 # @Author : zhuying
 # @Company : Minivision
-# @File : MobileFaceNet_pruned.py
+# @File : MobileFaceNetPruned.py
 # @Software : PyCharm
 
 from torch.nn import Linear, Conv2d, BatchNorm1d, BatchNorm2d, PReLU, Sequential, Module
