@@ -38,9 +38,11 @@ def test(image_name, model_dir, device_id):
     # save prediction result
     label = np.argmax(prediction)
     if label == 1:
+        print("True Face")
         result_text = "True"
         color = (255, 0, 0)
     else:
+        print("False Face")
         result_text = "False"
         color = (0, 0, 255)
     cv2.rectangle(image, (image_bbox[0], image_bbox[1]),
