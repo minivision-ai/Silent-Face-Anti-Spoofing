@@ -35,13 +35,13 @@ cd Silent-Face-Anti-Spoofing
 3.对图片进行切patch,采用人脸检测器图像中的人脸,获取人脸框,按照一定比例(scale)对人脸框进行扩边，为了保证模型的输入尺寸的一致性，将人脸框区域resize到固定尺寸(width, height)。下图中展示了部分patch的区域，参数信息2.7_0_0_80x80，分别表示scale，shift_ratio_x， shift_ratio_y，width,  height.
 ![不同的patch展示图]()
 ## 训练
-`python train.py --device_ids 0 --train_set your_trainset_name --num_classes 3  --patch_info your_patch`
-device_ids:选择GPU，可以为多个，比如0123
-train_set:训练集的名称
+`python train.py --device_ids 0 --train_set your_trainset_name --num_classes 3  --patch_info your_patch`  
+device_ids:选择GPU，可以为多个，比如0123  
+train_set:训练集的名称  
 patch_info:选择用于训练的patch
 ## 测试
- 将待测试图片放入images文件夹
-`python test.py --image_name “ ”`
+ 将待测试图片放入images文件夹  
+ `python test.py --image_name “ ”`  
  image_name:待测试图片的名称 xxx.jpg
 
  
