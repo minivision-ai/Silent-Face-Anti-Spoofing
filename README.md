@@ -1,6 +1,8 @@
 ![静默活体检测](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/logo.jpg)  
-该项目为[小视科技](https://www.minivision.cn/)的静默活体检测项目,您可以在安卓端安装下方的APK,体验静默活体的检测效果,我们的[AI开放平台](https://ai.minivision.cn/#/coreability/livedetection)也支持在线体验。  
-![静默活体APK](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/静默活体APK.jpeg)
+该项目为[小视科技](https://www.minivision.cn/)的静默活体检测项目,您可以扫描下方的二维码获取APK,在安卓端安装APK,体验静默活体的检测效果.  
+![静默活体APK](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/静默活体APK.jpeg)  
+我们的[AI开放平台](https://ai.minivision.cn/#/coreability/livedetection)也支持在线体验。  
+
 # 静默活体检测 (Silent-Face-Anti-Spoofing)   
 ## 简介
 活体检测技术旨在解决人脸识别过程中的假脸攻击（主要包括纸质照片，电脑屏幕，面具，3D打印假脸等）问题，可分为配合式活体检测和非配合式活体检测（静默活体检测）。配合式活体检测需要用户根据提示完成指定的动作或者表情变化然后通过算法判断当前用户是否为真人，静默活体则只需要采集一张用户照片即可输出活体结果。  
@@ -18,9 +20,9 @@
 
 
 ### 测试方法  
-- 显示信息:速度(ms), 置信度以及活体检测结果
+- 显示信息:速度(ms), 置信度(0~1)以及活体检测结果(真脸or假脸)
 - 点击右上角图标可设置阈值,如下图所示,如果置信度大于阈值,为真脸,否则为假脸  
-![设置阈值](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/tree/master/images/设置阈值.jpg)
+![设置阈值](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/tree/master/images/设置阈值.png)
 
 ### 测试须知 
 - 所有测试图片必须通过摄像头采集得到，否则不符合正常场景使用规范，算法效果也无法保证。
@@ -77,9 +79,9 @@ python train.py --device_ids 0  --patch_info your_patch
 `device_ids`选择GPU，可以为多个，比如0123  
 `patch_info`选择用于训练的patch
 ### 测试
- ./resources/anti_spoof_models 存放活体检测的融合模型  
- ./resources/detection_model 存放检测器模型  
- ./images/sample 存放测试图片   
+ ./resources/anti_spoof_models 活体检测的融合模型  
+ ./resources/detection_model 检测器模型  
+ ./images/sample 测试图片   
  ```
  python test.py --image_name your_image_name
 ```  
