@@ -49,8 +49,8 @@ cd Silent-Face-Anti-Spoofing
 ### 数据预处理
 1.将训练集分为3类,分别为纸质假脸(0类),真脸(1类)和电子屏幕假脸(2类),相同类别的图片放入一个文件夹;  
 2.因采用多尺度模型融合的方法,分别用原图和不同的patch训练模型,所以将数据分为原图和基于原图的patch;  
-3.原图(org_1_width**x**height),直接将原图resize到固定尺寸(width, height);  
-4.基于原图的patch(scale_width**x**height),采用人脸检测器人脸,获取人脸框,按照一定比例(scale)对人脸框进行扩边，为了保证模型的输入尺寸的一致性，将人脸框区域resize到固定尺寸(width, height),下图分别显示了原图以及不同scale的patch样例;  
+3.原图(org_1_height**x**width),直接将原图resize到固定尺寸(width, height);  
+4.基于原图的patch(scale_height**x**width),采用人脸检测器人脸,获取人脸框,按照一定比例(scale)对人脸框进行扩边，为了保证模型的输入尺寸的一致性，将人脸框区域resize到固定尺寸(width, height),下图分别显示了原图以及不同scale的patch样例;  
 ![patch demo](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/patch_demo.png)  
 5.采用傅里叶频谱图作为辅助监督,训练集图片均需生成对应的傅里叶频谱图.
 ```

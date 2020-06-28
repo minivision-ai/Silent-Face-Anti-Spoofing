@@ -33,7 +33,6 @@ def test(image_name, model_dir, device_id):
     # sum the prediction from single model's result
     for model_name in os.listdir(model_dir):
         h_input, w_input, model_type, scale = parse_model_name(model_name)
-        scale = None
         param = {
             "org_img": image,
             "bbox": image_bbox,
@@ -45,8 +44,6 @@ def test(image_name, model_dir, device_id):
         if scale is None:
             param["crop"] = False
         img = image_cropper.crop(**param)
-        cv2.imwrite(str(scale)+'.jpg',img)
-        return 0
         start = time.time()
         prediction += model_test.predict(img, os.path.join(model_dir, model_name))
         test_speed += time.time()-start
