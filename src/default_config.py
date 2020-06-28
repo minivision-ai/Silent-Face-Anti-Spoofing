@@ -6,47 +6,46 @@
 # @Software : PyCharm
 # --*-- coding: utf-8 --*--
 """
-default config for training and test
-
+default config for training
 """
+
 import torch
 from datetime import datetime
 from easydict import EasyDict
-from src.utility import make_if_not_exist
+from src.utility import make_if_not_exist, get_width_height, get_kernel
+
 
 def get_default_config():
-
     conf = EasyDict()
 
     # ----------------------training---------------
-    conf.schedule_lr_type = "MSTEP"#warmup
     conf.lr = 1e-1
     # [9, 13, 15]
-    conf.milestones = [24, 40, 48]  # down learing rate
+    conf.milestones = [10, 15, 22]  # down learing rate
     conf.gamma = 0.1
-    conf.epochs =60
+    conf.epochs = 25
     conf.momentum = 0.9
     conf.batch_size = 1024
 
     # model
-    conf.net_mode = 'MultiFTNet'
     conf.num_classes = 3
     conf.input_channel = 3
     conf.embedding_size = 128
-    # FT
+    # resize fourier image size
     conf.ft_height = 10
     conf.ft_width = 10
+    # conf.ft_root = './datasets/fourier_image'
     conf.ft_root = '/ssd/data/recognize_data/LiveBody/Train/new_patches/Fourier'
 
     # dataset
+    # conf.train_root_path = './datasets/rgb_image'
     conf.train_root_path = '/ssd/data/recognize_data/LiveBody/Train/new_patches'
 
     # save file path
-    conf.snapshot_root = '/gpfs10/user_home/zhuying/Models'
-    conf.OS_snapshot_dir_path = '{}/LiveBody/snapshot'.format(conf.snapshot_root)
+    conf.snapshot_dir_path = './saved_logs/snapshot'
 
     # log path
-    conf.log_path = '/ssd/user_home/zhuying/LiveBody/jobs'
+    conf.log_path = './saved_logs/jobs'
     # tensorboard
     conf.board_loss_every = 10
     # save model/iter
@@ -55,31 +54,22 @@ def get_default_config():
     return conf
 
 
-def update_config(args, conf, file_name):
-
-    current_time = datetime.now().strftime('%b%d_%H-%M-%S')
-
-    w_input = int(args.patch_info.split('x')[-1])
-    h_input = int(args.patch_info.split('x')[0].split('_')[-1])
-    conf.input_size = [h_input, w_input]
-    conf.kernel_size = ((h_input+15)//16, (w_input+15)//16)
-    conf.num_classes = args.num_classes
-    conf.patch_info = args.patch_info
-    conf.train_set = args.train_set
-
+def update_config(args, conf):
     conf.devices = args.devices
+    conf.patch_info = args.patch_info
+    w_input, h_input = get_width_height(args.patch_info)
+    conf.input_size = [h_input, w_input]
+    conf.kernel_size = get_kernel(w_input, h_input)
     conf.device = "cuda:{}".format(conf.devices[0]) if torch.cuda.is_available() else "cpu"
 
-    # set ArcFace loss param  bias, scale_value
-    job_name = file_name.split('-c')[0]
+    current_time = datetime.now().strftime('%b%d_%H-%M-%S')
+    job_name = 'Anti_Spoofing_{}'.format(args.patch_info)
     log_path = '{}/{}/{} '.format(conf.log_path, job_name, current_time)
-
-    snapshot_dir = '{}/{}'.format(conf.OS_snapshot_dir_path, job_name)
+    snapshot_dir = '{}/{}'.format(conf.snapshot_dir_path, job_name)
 
     make_if_not_exist(snapshot_dir)
     make_if_not_exist(log_path)
 
-    # save directory path
     conf.model_path = snapshot_dir
     conf.log_path = log_path
     conf.job_name = job_name

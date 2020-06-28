@@ -4,19 +4,15 @@
 # @Company : Minivision
 # @File : MultiFTNet.py
 # @Software : PyCharm
-
-import torch
 from torch import nn
-from models.MobileFaceNetPruned import MobileFaceNetPv4
+from src.model_lib.MobileFaceNetPruned import MobileFaceNetPv4
 
 
 class FTGenerator(nn.Module):
-
     def __init__(self, in_channels=48, out_channels=1):
         super(FTGenerator, self).__init__()
 
-        self.conv = nn.Sequential(
-
+        self.ft = nn.Sequential(
             nn.Conv2d(in_channels, 128, kernel_size=(3, 3), padding=1),
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=True),
@@ -31,16 +27,16 @@ class FTGenerator(nn.Module):
         )
 
     def forward(self, x):
-        return self.conv(x)
+        return self.ft(x)
 
 
 class MultiFTNet(nn.Module):
-
     def __init__(self, img_channel=3, num_classes=3, embedding_size=128, conv6_kernel=(5, 5)):
         super(MultiFTNet, self).__init__()
         self.img_channel = img_channel
         self.num_classes = num_classes
-        self.model = MobileFaceNetPv4(embedding_size=embedding_size, conv6_kernel=conv6_kernel, num_classes=num_classes, img_channel=img_channel)
+        self.model = MobileFaceNetPv4(embedding_size=embedding_size, conv6_kernel=conv6_kernel,
+                                      num_classes=num_classes, img_channel=img_channel)
         self.FTGenerator = FTGenerator(in_channels=128)
         self._initialize_weights()
 
@@ -76,19 +72,7 @@ class MultiFTNet(nn.Module):
         cls = self.model.prob(x1)
 
         if self.training:
-            dep = self.FTGenerator(x)
-            return cls, dep
+            ft = self.FTGenerator(x)
+            return cls, ft
         else:
             return cls
-
-
-if __name__ == '__main__':
-
-    net = MultiFTNet()
-    print(net)
-
-    input = torch.randn((2, 3, 80, 80))
-
-    cls, dep = net(input)
-
-    input = torch.randn((1, 3, 80, 80))

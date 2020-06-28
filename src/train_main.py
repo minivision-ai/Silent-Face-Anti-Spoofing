@@ -2,40 +2,48 @@
 # @Time : 20-6-4 上午9:59
 # @Author : zhuying
 # @Company : Minivision
-# @File : train_fas.py
+# @File : train_main.py
 # @Software : PyCharm
-from tqdm import tqdm
-from tensorboardX import SummaryWriter
+
 import torch
 from torch import optim
 from torch.nn import CrossEntropyLoss, MSELoss
+from tqdm import tqdm
+from tensorboardX import SummaryWriter
+
 from src.utility import get_time
-from models.MultiFTNet import MultiFTNet
-from src.dataset_loader import get_train_loader
+from src.model_lib.MultiFTNet import MultiFTNet
+from src.data_io.dataset_loader import get_train_loader
 
 
-class TrainFAS():
+class TrainMain:
     def __init__(self, conf):
         self.conf = conf
         self.board_loss_every = conf.board_loss_every
         self.save_every = conf.save_every
         self.step = 0
         self.start_epoch = 0
-        self._init_train_loader()
+        self.train_loader = get_train_loader(self.conf)
 
     def train_model(self):
         self._init_model_param()
         self._train_stage()
 
-    def _init_train_loader(self):
-        self.train_loader = get_train_loader(self.conf)
-
     def _init_model_param(self):
         self.cls_criterion = CrossEntropyLoss()
         self.ft_criterion = MSELoss()
         self.model = self._define_network()
-        self._get_optimizer()
-        self.schedule_lr = self._get_lr_scheduler(self.optimizer)
+        self.optimizer = optim.SGD(self.model.module.parameters(),
+                                   lr=self.conf.lr,
+                                   weight_decay=5e-4,
+                                   momentum=self.conf.momentum)
+
+        self.schedule_lr = optim.lr_scheduler.MultiStepLR(
+            self.optimizer, self.conf.milestones, self.conf.gamma, - 1)
+
+        print("lr: ", self.conf.lr)
+        print("epochs: ", self.conf.epochs)
+        print("milestones: ", self.conf.milestones)
 
     def _train_stage(self):
         self.model.train()
@@ -51,15 +59,13 @@ class TrainFAS():
             print('epoch {} started'.format(e))
             print("lr: ", self.schedule_lr.get_lr())
 
-            for info in tqdm(iter(self.train_loader)):
-                imgs = info[0:2]
-                labels = info[-1]
+            for sample, ft_sample, target in tqdm(iter(self.train_loader)):
+                imgs = [sample, ft_sample]
+                labels = target
 
-                loss, acc, loss_cls, loss_ft = self._train_batch_data(
-                    imgs, labels)
+                loss, acc, loss_cls, loss_ft = self._train_batch_data(imgs, labels)
                 running_loss_cls += loss_cls
                 running_loss_ft += loss_ft
-
                 running_loss += loss
                 running_acc += acc
 
@@ -75,13 +81,13 @@ class TrainFAS():
                     lr = self.optimizer.param_groups[0]['lr']
                     self.writer.add_scalar(
                         'Training/Learning_rate', lr, self.step)
-
                     loss_cls_board = running_loss_cls / self.board_loss_every
                     self.writer.add_scalar(
                         'Training/Loss_cls', loss_cls_board, self.step)
-                    loss_depth_board = running_loss_ft / self.board_loss_every
+                    loss_ft_board = running_loss_ft / self.board_loss_every
                     self.writer.add_scalar(
-                        'Training/Loss_ft', loss_depth_board, self.step)
+                        'Training/Loss_ft', loss_ft_board, self.step)
+
                     running_loss = 0.
                     running_acc = 0.
                     running_loss_cls = 0.
@@ -96,18 +102,18 @@ class TrainFAS():
         self.writer.close()
 
     def _train_batch_data(self, imgs, labels):
-
-        labels = labels.to(self.conf.device)
         self.optimizer.zero_grad()
-        embeddings, depth_ = self.model.forward(imgs[0].to(self.conf.device))
+        labels = labels.to(self.conf.device)
+        embeddings, feature_map = self.model.forward(imgs[0].to(self.conf.device))
 
         loss_cls = self.cls_criterion(embeddings, labels)
-        loss_depth = self.ft_criterion(depth_, imgs[1].to(self.conf.device))
-        loss = loss_cls + 5e-5 * loss_depth
+        loss_fea = self.ft_criterion(feature_map, imgs[1].to(self.conf.device))
+
+        loss = loss_cls + 5e-5*loss_fea
         acc = self._get_accuracy(embeddings, labels)[0]
         loss.backward()
         self.optimizer.step()
-        return loss.item(), acc, loss_cls.item(), loss_depth.item()
+        return loss.item(), acc, loss_cls.item(), loss_fea.item()
 
     def _define_network(self):
         param = {
@@ -120,26 +126,6 @@ class TrainFAS():
         model = torch.nn.DataParallel(model, self.conf.devices)
         model.to(self.conf.device)
         return model
-
-    def _get_optimizer(self):
-        self.optimizer = optim.SGD(self.model.module.parameters(), lr=self.conf.lr, weight_decay=5e-4, momentum=self.conf.momentum)
-
-    def _get_lr_scheduler(self, optimizer, start_epoch=0):
-
-        if self.conf.schedule_lr_type == "MSTEP":
-            print("lr: ", self.conf.lr)
-            print("epochs: ", self.conf.epochs)
-            print("milestones: ", self.conf.milestones)
-            lr_scheduler = optim.lr_scheduler.MultiStepLR(
-                optimizer, self.conf.milestones, self.conf.gamma, start_epoch - 1)
-        else:
-            lr_scheduler = None
-
-            print(
-                'expected scheduler type should be MultiStepLR'
-                'but got {}, please implementing corresponding method'.format(
-                    self.conf.schedule_lr_type))
-        return lr_scheduler
 
     def _get_accuracy(self, output, target, topk=(1,)):
         maxk = max(topk)

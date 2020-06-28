@@ -4,59 +4,98 @@
 # @Company : Minivision
 # @File : test.py
 # @Software : PyCharm
-from src.test_model import ModelTest
-from src.generate_patches import AffineCrop
+
 import os
 import cv2
 import numpy as np
 import argparse
 import warnings
+import time
+
+from src.anti_spoof_predict import AntiSpoofPredict
+from src.generate_patches import CropImage
+from src.utility import parse_model_name
 warnings.filterwarnings('ignore')
 
 
+SAMPLE_IMAGE_PATH = "./images/sample/"
+
+
 def test(image_name, model_dir, device_id):
-    model_test = ModelTest(device_id)
-    image = cv2.imread('./images/'+image_name)
+    model_test = AntiSpoofPredict(device_id)
+    image_cropper = CropImage()
+
+    image = cv2.imread(SAMPLE_IMAGE_PATH + image_name)
     image_bbox = model_test.get_bbox(image)
     prediction = np.zeros((1, 3))
-    # get the prediction of every model in the combined models
-    for model in os.listdir(model_dir):
-        info = model.split('_')[0:-1]
-        patch_info = '_'.join(info)
-        height, width = info[-1].split('x')
-        model_name = model.split('.pth')[0].split('_')[-1]
-        if patch_info.find('org') >= 0:
-            crop = False
-            image_crop = AffineCrop(image_bbox, int(width), int(height))
-            img = image_crop.crop(image, crop)
-        else:
-            info = patch_info.split('_')
-            scale, shift_x, shift_y = float(info[0]), float(info[1]), float(info[2])
-            image_crop = AffineCrop(image_bbox, int(width), int(height), scale, shift_x, shift_y)
-            img = image_crop.crop(image)
-        prediction += model_test.get_prediction(img, os.path.join(model_dir, model), model_name, patch_info)
-    # save prediction result
+
+    test_speed = 0
+    # sum the prediction from single model's result
+    for model_name in os.listdir(model_dir):
+        h_input, w_input, model_type, scale = parse_model_name(model_name)
+        scale = None
+        param = {
+            "org_img": image,
+            "bbox": image_bbox,
+            "scale": scale,
+            "out_w": w_input,
+            "out_h": h_input,
+            "crop": True,
+        }
+        if scale is None:
+            param["crop"] = False
+        img = image_cropper.crop(**param)
+        cv2.imwrite(str(scale)+'.jpg',img)
+        return 0
+        start = time.time()
+        prediction += model_test.predict(img, os.path.join(model_dir, model_name))
+        test_speed += time.time()-start
+
+    # draw result of prediction
     label = np.argmax(prediction)
+    value = prediction[0][label]/2
     if label == 1:
-        print("True Face")
-        result_text = "True"
+        print("Image '{}' is Real Face. Score: {:.2f}.".format(image_name, value))
+        result_text = "RealFace Score: {:.2f}".format(value)
         color = (255, 0, 0)
     else:
-        print("False Face")
-        result_text = "False"
+        print("Image '{}' is Fake Face. Score: {:.2f}.".format(image_name, value))
+        result_text = "FakeFace Score: {:.2f}".format(value)
         color = (0, 0, 255)
-    cv2.rectangle(image, (image_bbox[0], image_bbox[1]),
-                  (image_bbox[0]+image_bbox[2], image_bbox[1]+image_bbox[3]), color,2)
-    cv2.putText(image, result_text, (image_bbox[0], image_bbox[1]-5),cv2.FONT_HERSHEY_COMPLEX, 0.5, color)
-    cv2.imwrite("./result/"+image_name, image)
+    print("Prediction cost {:.2f} ms".format(test_speed))
+    cv2.rectangle(
+        image,
+        (image_bbox[0], image_bbox[1]),
+        (image_bbox[0] + image_bbox[2], image_bbox[1] + image_bbox[3]),
+        color, 2)
+    cv2.putText(
+        image,
+        result_text,
+        (image_bbox[0], image_bbox[1] - 5),
+        cv2.FONT_HERSHEY_COMPLEX, 0.5*image.shape[0]/1024, color)
+
+    format_ = os.path.splitext(image_name)[-1]
+    result_image_name = image_name.replace(format_, "_result" + format_)
+    cv2.imwrite(SAMPLE_IMAGE_PATH + result_image_name, image)
 
 
 if __name__ == "__main__":
     desc = "test"
     parser = argparse.ArgumentParser(description=desc)
-    parser.add_argument("--device_id", type=int, default=0, help="which gpu id, [0/1/2/3]")
-    parser.add_argument("--model_dir", type=str, default="./resources/combined_models", help="models used to test")
-    parser.add_argument("--image_name", type=str, default="image_T1.jpg", help="image used to test")
+    parser.add_argument(
+        "--device_id",
+        type=int,
+        default=0,
+        help="which gpu id, [0/1/2/3]")
+    parser.add_argument(
+        "--model_dir",
+        type=str,
+        default="./resources/anti_spoof_models",
+        help="model_lib used to test")
+    parser.add_argument(
+        "--image_name",
+        type=str,
+        default="image_T2.jpg",
+        help="image used to test")
     args = parser.parse_args()
     test(args.image_name, args.model_dir, args.device_id)
-

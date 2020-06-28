@@ -4,6 +4,7 @@
 # @Company : Minivision
 # @File : dataset_folder.py
 # @Software : PyCharm
+
 import cv2
 import torch
 from torchvision import datasets
@@ -15,7 +16,8 @@ def opencv_loader(path):
 
 
 class DatasetFolderFT(datasets.ImageFolder):
-    def __init__(self, root, ft_root, transform=None, target_transform=None, ft_width=10, ft_height=10, loader=opencv_loader):
+    def __init__(self, root, ft_root, transform=None, target_transform=None,
+                 ft_width=10, ft_height=10, loader=opencv_loader):
         super(DatasetFolderFT, self).__init__(root, transform, target_transform, loader)
         self.root = root
         self.ft_root = ft_root

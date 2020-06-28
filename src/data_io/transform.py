@@ -4,6 +4,7 @@
 # @Company : Minivision
 # @File : transform.py
 # @Software : PyCharm
+
 from __future__ import division
 import math
 import random
@@ -16,7 +17,7 @@ import numpy as np
 import numbers
 import types
 
-from src import functional as F
+from src.data_io import functional as F
 
 __all__ = ["Compose", "ToTensor", "ToPILImage", "Normalize", "RandomHorizontalFlip",
            "Lambda", "RandomResizedCrop", "ColorJitter", "RandomRotation"]

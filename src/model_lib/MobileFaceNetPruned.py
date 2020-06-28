@@ -4,10 +4,9 @@
 # @Company : Minivision
 # @File : MobileFaceNetPruned.py
 # @Software : PyCharm
-
-from torch.nn import Linear, Conv2d, BatchNorm1d, BatchNorm2d, PReLU, Sequential, Module
 import torch
 import torch.nn.functional as F
+from torch.nn import Linear, Conv2d, BatchNorm1d, BatchNorm2d, PReLU, Sequential, Module
 
 
 class L2Norm(Module):
@@ -23,25 +22,14 @@ class Flatten(Module):
 class Conv_block(Module):
     def __init__(self, in_c, out_c, kernel=(1, 1), stride=(1, 1), padding=(0, 0), groups=1):
         super(Conv_block, self).__init__()
-        self.conv = Conv2d(in_c, out_c, kernel_size=kernel, groups=groups, stride=stride, padding=padding, bias=False)
+        self.conv = Conv2d(in_c, out_c, kernel_size=kernel, groups=groups,
+                           stride=stride, padding=padding, bias=False)
         self.bn = BatchNorm2d(out_c)
         self.prelu = PReLU(out_c)
 
     def forward(self, x):
         x = self.conv(x)
         x = self.bn(x)
-        x = self.prelu(x)
-        return x
-
-
-class Conv_block_no_bn(Module):
-    def __init__(self, in_c, out_c, kernel=(1, 1), stride=(1, 1), padding=(0, 0), groups=1):
-        super(Conv_block_no_bn, self).__init__()
-        self.conv = Conv2d(in_c, out_channels=out_c, kernel_size=kernel, groups=groups, stride=stride, padding=padding, bias=False)
-        self.prelu = PReLU(out_c)
-
-    def forward(self, x):
-        x = self.conv(x)
         x = self.prelu(x)
         return x
 
@@ -91,7 +79,8 @@ class Residual(Module):
             c1_tuple = c1[i]
             c2_tuple = c2[i]
             c3_tuple = c3[i]
-            modules.append(Depth_Wise(c1_tuple, c2_tuple, c3_tuple, residual=True, kernel=kernel, padding=padding, stride=stride, groups=groups))
+            modules.append(Depth_Wise(c1_tuple, c2_tuple, c3_tuple, residual=True,
+                                      kernel=kernel, padding=padding, stride=stride, groups=groups))
         self.model = Sequential(*modules)
 
     def forward(self, x):
@@ -99,9 +88,9 @@ class Residual(Module):
 
 
 class MobileFaceNet(Module):
-    def __init__(self, keep, embedding_size, conv6_kernel=(7, 7), p=1, drop_p=0.75, num_classes=4, img_channel=3):
+    def __init__(self, keep, embedding_size, conv6_kernel=(7, 7),
+                 drop_p=0.0, num_classes=3, img_channel=3):
         super(MobileFaceNet, self).__init__()
-        # Focal Loss
         self.embedding_size = embedding_size
 
         self.conv1 = Conv_block(img_channel, keep[0], kernel=(3, 3), stride=(2, 2), padding=(1, 1))
@@ -110,35 +99,45 @@ class MobileFaceNet(Module):
         c1 = [(keep[1], keep[2])]
         c2 = [(keep[2], keep[3])]
         c3 = [(keep[3], keep[4])]
+
         self.conv_23 = Depth_Wise(c1[0], c2[0], c3[0], kernel=(3, 3), stride=(2, 2), padding=(1, 1), groups=keep[3])
+
         c1 = [(keep[4], keep[5]), (keep[7], keep[8]), (keep[10], keep[11]), (keep[13], keep[14])]
         c2 = [(keep[5], keep[6]), (keep[8], keep[9]), (keep[11], keep[12]), (keep[14], keep[15])]
         c3 = [(keep[6], keep[7]), (keep[9], keep[10]), (keep[12], keep[13]), (keep[15], keep[16])]
+
         self.conv_3 = Residual(c1, c2, c3, num_block=4, groups=keep[4], kernel=(3, 3), stride=(1, 1), padding=(1, 1))
 
         c1 = [(keep[16], keep[17])]
         c2 = [(keep[17], keep[18])]
         c3 = [(keep[18], keep[19])]
+
         self.conv_34 = Depth_Wise(c1[0], c2[0], c3[0], kernel=(3, 3), stride=(2, 2), padding=(1, 1), groups=keep[19])
-        c1 = [(keep[19], keep[20]), (keep[22], keep[23]), (keep[25], keep[26]), (keep[28], keep[29]), (keep[31], keep[32]), (keep[34], keep[35])]
-        c2 = [(keep[20], keep[21]), (keep[23], keep[24]), (keep[26], keep[27]), (keep[29], keep[30]), (keep[32], keep[33]), (keep[35], keep[36])]
-        c3 = [(keep[21], keep[22]), (keep[24], keep[25]), (keep[27], keep[28]), (keep[30], keep[31]), (keep[33], keep[34]), (keep[36], keep[37])]
+
+        c1 = [(keep[19], keep[20]), (keep[22], keep[23]), (keep[25], keep[26]), (keep[28], keep[29]),
+              (keep[31], keep[32]), (keep[34], keep[35])]
+        c2 = [(keep[20], keep[21]), (keep[23], keep[24]), (keep[26], keep[27]), (keep[29], keep[30]),
+              (keep[32], keep[33]), (keep[35], keep[36])]
+        c3 = [(keep[21], keep[22]), (keep[24], keep[25]), (keep[27], keep[28]), (keep[30], keep[31]),
+              (keep[33], keep[34]), (keep[36], keep[37])]
 
         self.conv_4 = Residual(c1, c2, c3, num_block=6, groups=keep[19], kernel=(3, 3), stride=(1, 1), padding=(1, 1))
 
         c1 = [(keep[37], keep[38])]
         c2 = [(keep[38], keep[39])]
         c3 = [(keep[39], keep[40])]
+
         self.conv_45 = Depth_Wise(c1[0], c2[0], c3[0], kernel=(3, 3), stride=(2, 2), padding=(1, 1), groups=keep[40])
+
         c1 = [(keep[40], keep[41]), (keep[43], keep[44])]
         c2 = [(keep[41], keep[42]), (keep[44], keep[45])]
         c3 = [(keep[42], keep[43]), (keep[45], keep[46])]
-        self.conv_5 = Residual(c1, c2, c3, num_block=2, groups=keep[40], kernel=(3, 3), stride=(1, 1), padding=(1, 1))
 
+        self.conv_5 = Residual(c1, c2, c3, num_block=2, groups=keep[40], kernel=(3, 3), stride=(1, 1), padding=(1, 1))
         self.conv_6_sep = Conv_block(keep[46], keep[47], kernel=(1, 1), stride=(1, 1), padding=(0, 0))
         self.conv_6_dw = Linear_block(keep[47], keep[48], groups=keep[48], kernel=conv6_kernel, stride=(1, 1), padding=(0, 0))
         self.conv_6_flatten = Flatten()
-        self.linear = Linear(int(512*p), embedding_size, bias=False)
+        self.linear = Linear(512, embedding_size, bias=False)
         self.bn = BatchNorm1d(embedding_size)
         self.drop = torch.nn.Dropout(p=drop_p)
         self.prob = Linear(embedding_size, num_classes, bias=False)
@@ -155,7 +154,6 @@ class MobileFaceNet(Module):
         out = self.conv_6_sep(out)
         out = self.conv_6_dw(out)
         out = self.conv_6_flatten(out)
-        # out = self.linear(out)
         if self.embedding_size != 512:
             out = self.linear(out)
         out = self.bn(out)
@@ -165,44 +163,26 @@ class MobileFaceNet(Module):
 
 
 keep_dict = {'1.8M': [32, 32, 103, 103, 64, 13, 13, 64, 26, 26,
-                          64, 13, 13, 64, 52, 52, 64, 231, 231, 128,
-                          154, 154, 128, 52, 52, 128, 26, 26, 128, 52,
-                          52, 128, 26, 26, 128, 26, 26, 128, 308, 308,
-                          128, 26, 26, 128, 26, 26, 128, 512, 512],
-             '1.2M': [13, 13, 77, 77, 64, 13, 13, 64, 13, 13, 64,
-                      13, 13, 64, 13, 13, 64, 180, 180, 128, 26,
-                      26, 128, 26, 26, 128, 26, 26, 128, 26, 26,
-                      128, 26, 26, 128, 26, 26, 128, 52, 52, 128,
-                      26, 26, 128, 26, 26, 128, 512, 512],
-             '1.2M_': [13, 13, 77, 77, 64, 13, 13, 64, 13, 13, 64, 13,
-                       13, 64, 13, 13, 64, 154, 154, 128, 26, 26, 128, 26,
-                       26, 128, 26, 26, 128, 26, 26, 128, 26, 26, 128, 26, 26,
-                       128, 103, 103, 128, 26, 26, 128, 26, 26, 128, 512, 512],
+                      64, 13, 13, 64, 52, 52, 64, 231, 231, 128,
+                      154, 154, 128, 52, 52, 128, 26, 26, 128, 52,
+                      52, 128, 26, 26, 128, 26, 26, 128, 308, 308,
+                      128, 26, 26, 128, 26, 26, 128, 512, 512],
+
              '1.8M_': [32, 32, 103, 103, 64, 13, 13, 64, 13, 13, 64, 13,
                        13, 64, 13, 13, 64, 231, 231, 128, 231, 231, 128, 52,
                        52, 128, 26, 26, 128, 77, 77, 128, 26, 26, 128, 26, 26,
-                       128, 308, 308, 128, 26, 26, 128, 26, 26, 128, 512, 512]}
+                       128, 308, 308, 128, 26, 26, 128, 26, 26, 128, 512, 512]
+             }
 
 
 # (80x80) flops: 0.044, params: 0.41
-def MobileFaceNetPv1(embedding_size=128, conv6_kernel=(7, 7), p=1, drop_p=0.75, num_classes=3, img_channel=3):
+def MobileFaceNetPv1(embedding_size=128, conv6_kernel=(7, 7),
+                     drop_p=0.2, num_classes=3, img_channel=3):
+    return MobileFaceNet(keep_dict['1.8M'], embedding_size, conv6_kernel, drop_p, num_classes, img_channel)
 
-    return MobileFaceNet(keep_dict['1.8M'], embedding_size, conv6_kernel, p, drop_p, num_classes, img_channel)
-
-
-# (80x80) flops: 0.024, params: 0.27
-def MobileFaceNetPv2(embedding_size=128, conv6_kernel=(7, 7), p=1, drop_p=0.75, num_classes=3, img_channel=3):
-
-    return MobileFaceNet(keep_dict['1.2M'], embedding_size, conv6_kernel, p, drop_p, num_classes, img_channel)
-
-
-# (80x80) flops: 0.024, params: 0.28
-def MobileFaceNetPv3(embedding_size=128, conv6_kernel=(7, 7), p=1, drop_p=0.75, num_classes=3, img_channel=3):
-
-    return MobileFaceNet(keep_dict['1.2M_'], embedding_size, conv6_kernel, p, drop_p, num_classes, img_channel)
 
 # (80x80) flops: 0.044, params: 0.43
-def MobileFaceNetPv4(embedding_size=128, conv6_kernel=(7, 7), p=1, drop_p=0.75, num_classes=3, img_channel=3):
-
-    return MobileFaceNet(keep_dict['1.8M_'], embedding_size, conv6_kernel, p, drop_p, num_classes, img_channel)
+def MobileFaceNetPv4(embedding_size=128, conv6_kernel=(7, 7),
+                     drop_p=0.2, num_classes=3, img_channel=3):
+    return MobileFaceNet(keep_dict['1.8M_'], embedding_size, conv6_kernel, drop_p, num_classes, img_channel)
 
