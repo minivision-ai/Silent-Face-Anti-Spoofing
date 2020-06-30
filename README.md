@@ -1,13 +1,20 @@
 ![静默活体检测](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/logo.jpg)  
-该项目为[小视科技](https://www.minivision.cn/)的静默活体检测项目,您可以扫描下方的二维码获取APK,在安卓端安装APK,体验静默活体的检测效果.  
-![静默活体APK](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/静默活体APK.jpeg)  
+该项目为[小视科技](https://www.minivision.cn/)的静默活体检测项目,您可以扫描下方的二维码获取APK(提取码为**phwd**),在安卓端安装APK,体验静默活体的检测效果.  
+![静默活体APK](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/静默活体APK.png)  
 我们的[AI开放平台](https://ai.minivision.cn/#/coreability/livedetection)也支持在线体验。  
-
 # 静默活体检测 (Silent-Face-Anti-Spoofing)   
 ## 简介
 活体检测技术旨在解决人脸识别过程中的假脸攻击（主要包括纸质照片，电脑屏幕，面具，3D打印假脸等）问题，可分为配合式活体检测和非配合式活体检测（静默活体检测）。配合式活体检测需要用户根据提示完成指定的动作或者表情变化然后通过算法判断当前用户是否为真人，静默活体则只需要采集一张用户照片即可输出活体结果。  
 因傅里叶频谱图一定程度上能够反应真假脸在频域的差异,我们提出了一种深度学习结合图像傅里叶变换的静默活体检测方法, 模型架构由分类主分支和傅里叶频谱图辅助监督分支构成，整体架构如下图所示：  
-![整体架构图](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/framework.png)
+![整体架构图](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/tree/master/images/framework.png)  
+
+因为移动端的算力有限,为了最大程度的降低模型开销,提升用户的体验.采用剪枝的MobileFaceNet作为backbone,在精度稍有损失的情况下,明显提升模型的性能(降低计算量与参数量).  
+
+|Model|FLOPs|Params|
+| :------:|:-----:|:-----:| 
+|MobileFaceNet|0.224G|0.991M|
+|MobileFaceNetPv1|0.081G|0.414M|
+|MobileFaceNetPv4|0.081G|0.435M|
 
 ## APK
  
@@ -16,8 +23,9 @@
 | :------:|:-----:|:-----:| :----: | :----: | :----: |
 |   APK模型 |84M| 20ms | 1e-5|97.8%| 开源|
 | 高精度模型 |162M| 40ms| 1e-5 |99.7%| 未开源 |
-### Demo  
 
+### Demo  
+![demo](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/tree/master/images/demo.gif)
 
 ### 测试方法  
 - 显示信息:速度(ms), 置信度(0~1)以及活体检测结果(真脸or假脸)
@@ -35,10 +43,6 @@
 | :------:|:-----:|:-----:|:-----:|:-----:|:-----:|
 |速度/ms|19|23|25|25|24|
 
-
-
-
-
 ## 工程
 ### 安装依赖库  
 `pip install -r requirements.txt`
@@ -51,46 +55,43 @@ cd Silent-Face-Anti-Spoofing
 ### 数据预处理
 1.将训练集分为3类,分别为纸质假脸(0类),真脸(1类)和电子屏幕假脸(2类),相同类别的图片放入一个文件夹;  
 2.因采用多尺度模型融合的方法,分别用原图和不同的patch训练模型,所以将数据分为原图和基于原图的patch;  
-3.原图(org_1_height**x**width),直接将原图resize到固定尺寸(width, height);  
-4.基于原图的patch(scale_height**x**width),采用人脸检测器人脸,获取人脸框,按照一定比例(scale)对人脸框进行扩边，为了保证模型的输入尺寸的一致性，将人脸框区域resize到固定尺寸(width, height),下图分别显示了原图以及不同scale的patch样例;  
-![patch demo](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/patch_demo.png)  
-5.采用傅里叶频谱图作为辅助监督,训练集图片均需生成对应的傅里叶频谱图.
+- 原图(org_1_height**x**width),直接将原图resize到固定尺寸(width, height),如图1所示;  
+- 基于原图的patch(scale_height**x**width),采用人脸检测器人脸,获取人脸框,按照一定比例(scale)对人脸框进行扩边，为了保证模型的输入尺寸的一致性，将人脸框区域resize到固定尺寸(width, height),图2-4分别显示了scale为1,2.7和4的patch样例;  
+![patch demo](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/tree/master/images/patch_demo.png)  
+
+3.采用傅里叶频谱图作为辅助监督,训练集图片均需生成对应的傅里叶频谱图.
+**数据集的目录结构如下所示**
 ```
 ├── datasets
-    ├── Fourier_Images
+    ├── RGB_Images
         ├── org_1_80x60
-            ├── eee.jpg
-            ├── ddd.jpg
-            └── ...
+            ├── 0
+            ├── 1
+            └── 2
         ├── 1_80x80
         └── ...
-    └── RGB_Images
-        ├── org_1_80x60
-            ├── eee.jpg
-            ├── ddd.jpg
-            └── ...
-        ├── 1_80x80
-        └── ...
+    └── Fourier_Images
+        ├── 0
+        ├── 1
+        └── 2
 ```
 ### 训练
 ```
 python train.py --device_ids 0  --patch_info your_patch
 ```  
-`device_ids`选择GPU，可以为多个，比如0123  
-`patch_info`选择用于训练的patch
 ### 测试
  ./resources/anti_spoof_models 活体检测的融合模型  
  ./resources/detection_model 检测器模型  
- ./images/sample 测试图片   
+ ./images/sample 测试图片  
+ **注意:测试图片需从宽高比为3:4的视频流中截取**   
  ```
  python test.py --image_name your_image_name
 ```  
- `image_name`待测试图片的名称 xxx.jpg
 ## Q&A
 **Q:**  数据集开源吗?  
 A: 不开源  
-**Q:** 如何获取高精度模型?  
-A:
+**Q:** 为什么测试图片需从宽高比为3:4的视频流中截取?  
+A: 因为活体的应用场景是实时视频流,该活体模型适配480x640的实时视频流  
  
 ## 参考  
 - 检测器 [RetinaFace](https://github.com/deepinsight/insightface/tree/master/RetinaFace)

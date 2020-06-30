@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="40e112b5-5437-4953-a966-f1e1812d6281" name="Default Changelist" comment="update dirs">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="40e112b5-5437-4953-a966-f1e1812d6281" name="Default Changelist" comment="fix little bugs">
+      <change beforePath="$PROJECT_DIR$/.idea/Silent-Face-Anti-Spoofing.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/patch_demo.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/patch_demo.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/sample/image_T2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/datasets/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/sample/image_F1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images/sample/image_F1.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/sample/image_F1_result.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images/sample/image_F1_result.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/sample/image_F2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images/sample/image_F2.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/sample/image_F2_result.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images/sample/image_F2_result.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/sample/image_T1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images/sample/image_T1.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/sample/image_T1_result.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images/sample/image_T1_result.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/设置阈值.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/设置阈值.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/静默活体APK.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/default_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/default_config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -28,22 +41,22 @@
           <entry key="Python Console" value="15" />
           <entry key="dummy" value="2" />
           <entry key="md" value="13" />
-          <entry key="py" value="2063" />
-          <entry key="txt" value="50" />
+          <entry key="py" value="3160" />
+          <entry key="txt" value="75" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Markdown" value="13" />
-          <entry key="PLAIN_TEXT" value="63" />
-          <entry key="Python" value="2078" />
+          <entry key="PLAIN_TEXT" value="88" />
+          <entry key="Python" value="3175" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="LICENSE" value="1" />
           <entry key="md" value="2" />
-          <entry key="py" value="40" />
+          <entry key="py" value="44" />
           <entry key="txt" value="1" />
         </counts>
       </usages-collector>
@@ -51,7 +64,7 @@
         <counts>
           <entry key="Markdown" value="2" />
           <entry key="PLAIN_TEXT" value="2" />
-          <entry key="Python" value="40" />
+          <entry key="Python" value="44" />
         </counts>
       </usages-collector>
     </session>
@@ -74,8 +87,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/generate_patches.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-211">
-              <caret line="33" column="26" selection-start-line="33" selection-start-column="26" selection-end-line="33" selection-end-column="26" />
+            <state relative-caret-position="181">
+              <caret line="52" column="8" selection-start-line="52" selection-start-column="8" selection-end-line="52" selection-end-column="8" />
               <folding>
                 <element signature="e#205#215#0" expanded="true" />
               </folding>
@@ -86,11 +99,52 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="145">
-              <caret line="45" column="41" selection-start-line="45" selection-start-column="41" selection-end-line="45" selection-end-column="41" />
+            <state relative-caret-position="544">
+              <caret line="87" column="53" selection-start-line="87" selection-start-column="53" selection-end-line="87" selection-end-column="53" />
               <folding>
                 <element signature="e#133#142#0" expanded="true" />
+                <marker date="1593508074000" expanded="true" signature="428:431" ph="..." />
+                <marker date="1593508074000" expanded="true" signature="485:804" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/default_config.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="207">
+              <caret line="36" column="45" selection-start-line="36" selection-start-column="45" selection-end-line="36" selection-end-column="45" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/anti_spoof_predict.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="389">
+              <caret line="88" column="52" selection-start-line="88" selection-start-column="52" selection-end-line="88" selection-end-column="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/model_lib/MobileFaceNetPruned.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="156">
+              <caret line="6" selection-start-line="6" selection-end-line="6" />
+              <folding>
+                <element signature="e#147#159#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-1038335296/cv2/cv2/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-619">
+              <caret line="9487" column="4" selection-start-line="9487" selection-start-column="4" selection-end-line="9487" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -99,8 +153,8 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="260">
-                <caret line="10" column="1" lean-forward="true" selection-end-line="94" />
+              <first_editor relative-caret-position="1040">
+                <caret line="97" lean-forward="true" selection-start-line="97" selection-end-line="97" />
               </first_editor>
               <second_editor />
             </state>
@@ -150,12 +204,13 @@
         <option value="$PROJECT_DIR$/src/generate_patches.py" />
         <option value="$PROJECT_DIR$/src/utility.py" />
         <option value="$PROJECT_DIR$/train.py" />
-        <option value="$PROJECT_DIR$/src/default_config.py" />
         <option value="$PROJECT_DIR$/models/MultiFTNet.py" />
         <option value="$PROJECT_DIR$/src/train_fas.py" />
         <option value="$PROJECT_DIR$/src/models/MultiFTNet.py" />
         <option value="$PROJECT_DIR$/src/test_model.py" />
         <option value="$PROJECT_DIR$/LICENSE" />
+        <option value="$PROJECT_DIR$/src/anti_spoof_predict.py" />
+        <option value="$PROJECT_DIR$/src/default_config.py" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/test.py" />
       </list>
@@ -178,6 +233,22 @@
             <path>
               <item name="Silent-Face-Anti-Spoofing" type="b2602c69:ProjectViewProjectNode" />
               <item name="Silent-Face-Anti-Spoofing" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Silent-Face-Anti-Spoofing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Silent-Face-Anti-Spoofing" type="462c0819:PsiDirectoryNode" />
+              <item name="images" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Silent-Face-Anti-Spoofing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Silent-Face-Anti-Spoofing" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Silent-Face-Anti-Spoofing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Silent-Face-Anti-Spoofing" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="anti_spoof_models" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Silent-Face-Anti-Spoofing" type="b2602c69:ProjectViewProjectNode" />
@@ -327,7 +398,14 @@
       <option name="project" value="LOCAL" />
       <updated>1593329352259</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="fix little bugs">
+      <created>1593331044634</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1593331044634</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -361,12 +439,12 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14254506" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21627526" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" sideWeight="0.49972692" visible="true" weight="0.32903227" />
+      <window_info anchor="bottom" id="Version Control" sideWeight="0.49972692" visible="true" weight="0.24408603" />
       <window_info anchor="bottom" id="Python Console" sideWeight="0.49972692" weight="0.27204302" />
       <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" sideWeight="0.50027305" side_tool="true" visible="true" weight="0.32903227" />
+      <window_info anchor="bottom" id="Event Log" sideWeight="0.50027305" side_tool="true" visible="true" weight="0.24408603" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49972692" weight="0.2311828" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49645004" weight="0.23333333" />
@@ -387,7 +465,8 @@
     <MESSAGE value="update test method" />
     <MESSAGE value="change LICENSE" />
     <MESSAGE value="update pic" />
-    <option name="LAST_COMMIT_MESSAGE" value="update pic" />
+    <MESSAGE value="fix little bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix little bugs" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/tools/iccv_flops_calculation.py">
@@ -416,13 +495,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-1038335296/cv2/cv2/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
-          <caret line="1352" selection-start-line="1352" selection-end-line="1352" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/data_io/functional.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -457,16 +529,6 @@
           <caret line="36" column="48" selection-start-line="36" selection-start-column="48" selection-end-line="36" selection-end-column="48" />
           <folding>
             <element signature="e#142#181#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/default_config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="51" column="6" selection-start-line="51" selection-start-column="6" selection-end-line="51" selection-end-column="6" />
-          <folding>
-            <element signature="e#216#228#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -541,16 +603,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/generate_patches.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-211">
-          <caret line="33" column="26" selection-start-line="33" selection-start-column="26" selection-end-line="33" selection-end-column="26" />
-          <folding>
-            <element signature="e#205#215#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/utility.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="181">
@@ -562,11 +614,52 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-1038335296/cv2/cv2/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-619">
+          <caret line="9487" column="4" selection-start-line="9487" selection-start-column="4" selection-end-line="9487" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/model_lib/MobileFaceNetPruned.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+          <folding>
+            <element signature="e#147#159#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/generate_patches.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="52" column="8" selection-start-line="52" selection-start-column="8" selection-end-line="52" selection-end-column="8" />
+          <folding>
+            <element signature="e#205#215#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/anti_spoof_predict.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="389">
+          <caret line="88" column="52" selection-start-line="88" selection-start-column="52" selection-end-line="88" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/default_config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="36" column="45" selection-start-line="36" selection-start-column="45" selection-end-line="36" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="260">
-            <caret line="10" column="1" lean-forward="true" selection-end-line="94" />
+          <first_editor relative-caret-position="1040">
+            <caret line="97" lean-forward="true" selection-start-line="97" selection-end-line="97" />
           </first_editor>
           <second_editor />
         </state>
@@ -574,10 +667,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="45" column="41" selection-start-line="45" selection-start-column="41" selection-end-line="45" selection-end-column="41" />
+        <state relative-caret-position="544">
+          <caret line="87" column="53" selection-start-line="87" selection-start-column="53" selection-end-line="87" selection-end-column="53" />
           <folding>
             <element signature="e#133#142#0" expanded="true" />
+            <marker date="1593508074000" expanded="true" signature="428:431" ph="..." />
+            <marker date="1593508074000" expanded="true" signature="485:804" ph="..." />
           </folding>
         </state>
       </provider>
