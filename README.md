@@ -6,7 +6,7 @@
 ## 简介
   活体检测技术旨在人脸识别之前抵御假脸的恶意攻击，攻击方式括纸质照片，电脑屏幕，面具，3D打印模型等。可分为配合式活体检测和非配合式活体检测（静默活体检测）。配合式活体检测需要用户根据提示完成指定的动作或者表情变化然后通过算法判断当前用户是否为真人，静默活体则只需要采集一张用户照片即可输出活体结果。  
 因傅里叶频谱图一定程度上能够反应真假脸在频域的差异,我们提出了一种深度学习结合图像傅里叶变换的静默活体检测方法, 模型架构由分类主分支和傅里叶频谱图辅助监督分支构成，整体架构如下图所示：  
-![整体架构图](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/tree/master/images/framework.png)  
+![整体架构图](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/framework.png)  
 
 因为移动端的算力有限,为了最大程度的降低模型开销,提升用户的体验.采用剪枝的MobileFaceNet作为backbone,在精度稍有损失的情况下,明显提升模型的性能(降低计算量与参数量).  
 
@@ -25,12 +25,12 @@
 | 高精度模型 |162M| 40ms| 1e-5 |99.7%| 未开源 |
 
 ### Demo  
-![demo](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/tree/master/images/demo.gif)
+![demo](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/demo.gif)
 
 ### 测试方法  
 - 显示信息:速度(ms), 置信度(0~1)以及活体检测结果(真脸or假脸)
 - 点击右上角图标可设置阈值,如下图所示,如果置信度大于阈值,为真脸,否则为假脸  
-![设置阈值](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/tree/master/images/设置阈值.png)
+![设置阈值](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/设置阈值.png)
 
 ### 测试须知 
 - 所有测试图片必须通过摄像头采集得到，否则不符合正常场景使用规范，算法效果也无法保证。
@@ -57,7 +57,7 @@ cd Silent-Face-Anti-Spoofing
 2.因采用多尺度模型融合的方法,分别用原图和不同的patch训练模型,所以将数据分为原图和基于原图的patch;  
 - 原图(org_1_height**x**width),直接将原图resize到固定尺寸(width, height),如图1所示;  
 - 基于原图的patch(scale_height**x**width),采用人脸检测器人脸,获取人脸框,按照一定比例(scale)对人脸框进行扩边，为了保证模型的输入尺寸的一致性，将人脸框区域resize到固定尺寸(width, height),图2-4分别显示了scale为1,2.7和4的patch样例;  
-![patch demo](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/tree/master/images/patch_demo.png)  
+![patch demo](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/patch_demo.png)  
 
 3.采用傅里叶频谱图作为辅助监督,训练集图片均需生成对应的傅里叶频谱图.
 **数据集的目录结构如下所示**
