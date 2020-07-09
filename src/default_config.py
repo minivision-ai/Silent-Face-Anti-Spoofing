@@ -34,7 +34,6 @@ def get_default_config():
     # resize fourier image size
     conf.ft_height = 10
     conf.ft_width = 10
-    conf.ft_root = './datasets/fourier_image'
 
     # dataset
     conf.train_root_path = './datasets/rgb_image'

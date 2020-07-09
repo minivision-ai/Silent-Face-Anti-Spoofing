@@ -109,7 +109,7 @@ class TrainMain:
         loss_cls = self.cls_criterion(embeddings, labels)
         loss_fea = self.ft_criterion(feature_map, imgs[1].to(self.conf.device))
 
-        loss = loss_cls + 5e-5*loss_fea
+        loss = 0.5*loss_cls + 0.5*loss_fea
         acc = self._get_accuracy(embeddings, labels)[0]
         loss.backward()
         self.optimizer.step()

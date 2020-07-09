@@ -22,7 +22,7 @@ def get_train_loader(conf):
         trans.ToTensor()
     ])
     root_path = '{}/{}'.format(conf.train_root_path, conf.patch_info)
-    trainset = DatasetFolderFT(root_path, conf.ft_root, train_transform,
+    trainset = DatasetFolderFT(root_path, train_transform,
                                None, conf.ft_width, conf.ft_height)
     train_loader = DataLoader(
         trainset,

@@ -5,6 +5,7 @@
 # @File : MultiFTNet.py
 # @Software : PyCharm
 from torch import nn
+import torch.nn.functional as F
 from src.model_lib.MobileFaceNetPruned import MobileFaceNetPv4
 
 
@@ -25,6 +26,7 @@ class FTGenerator(nn.Module):
             nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True)
         )
+
 
     def forward(self, x):
         return self.ft(x)
