@@ -65,17 +65,13 @@ cd Silent-Face-Anti-Spoofing
 **数据集的目录结构如下所示**
 ```
 ├── datasets
-    ├── RGB_Images
+    └── RGB_Images
         ├── org_1_80x60
             ├── 0
             ├── 1
             └── 2
         ├── 1_80x80
         └── ...
-    └── Fourier_Images
-        ├── 0
-        ├── 1
-        └── 2
 ```  
 ### 训练
 ```
