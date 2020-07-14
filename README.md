@@ -3,7 +3,6 @@
 # 静默活体检测 (Silent-Face-Anti-Spoofing)   
 该项目为[小视科技](https://www.minivision.cn/)的静默活体检测项目,您可以扫描下方的二维码获取APK,在安卓端安装APK,体验静默活体的检测效果.   
 <img src="https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/静默活体APK.jpeg" width="200" height="200" align=center />  
-也可以前往我们的ai开放平台进行在线体验：https://ai.minivision.cn/#/coreability/livedetection  
 ## 简介
 在本工程中我们开源了活体模型训练架构，数据预处理方法，模型训练和测试脚本以及开源的APK供大家测试使用。  
 
