@@ -1,11 +1,13 @@
 **中文版**|[English Version](README_EN.md)  
 ![静默活体检测](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/logo.jpg)  
 # 静默活体检测 (Silent-Face-Anti-Spoofing)   
-该项目为[小视科技](https://www.minivision.cn/)的静默活体检测项目,您可以扫描下方的二维码获取APK,在安卓端安装APK,体验静默活体的检测效果.   
+该项目为[小视科技](https://www.minivision.cn/)的静默活体检测项目,您可以扫描下方的二维码获取安卓端APK,体验静默活体的检测效果.   
 <img src="https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/静默活体APK.jpeg" width="200" height="200" align=center />  
 ## 简介
 在本工程中我们开源了活体模型训练架构，数据预处理方法，模型训练和测试脚本以及开源的APK供大家测试使用。  
-活体检测技术主要是判别机器前出现的人脸是真实还是伪造的，其中借助其他媒介呈现的人脸都可以定义为虚假的人脸，包括打印的纸质照片、电子产品的显示屏幕、硅胶面具、立体的3D人像等。目前主流的活体解决方案分为配合式活体检测和非配合式活体检测（静默活体检测）。配合式活体检测需要用户根据提示完成指定的动作，然后再进行活体校验，静默活体则在用户无感的情况下直接进行活体校验。 
+
+活体检测技术主要是判别机器前出现的人脸是真实还是伪造的，其中借助其他媒介呈现的人脸都可以定义为虚假的人脸，包括打印的纸质照片、电子产品的显示屏幕、硅胶面具、立体的3D人像等。目前主流的活体解决方案分为配合式活体检测和非配合式活体检测（静默活体检测）。配合式活体检测需要用户根据提示完成指定的动作，然后再进行活体校验，静默活体则在用户无感的情况下直接进行活体校验。  
+ 
 因傅里叶频谱图一定程度上能够反应真假脸在频域的差异,因此我们采用了一种基于傅里叶频谱图辅助监督的静默活体检测方法, 模型架构由分类主分支和傅里叶频谱图辅助监督分支构成，整体架构如下图所示：  
 ![整体架构图](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/framework.jpeg)  
 
