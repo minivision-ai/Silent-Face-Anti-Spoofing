@@ -95,7 +95,9 @@ python train.py --device_ids 0  --patch_info your_patch
  python test.py --image_name your_image_name
  ```    
 ## Reference 
-- Detector [RetinaFace](https://github.com/deepinsight/insightface/tree/master/RetinaFace)
+- Detector [RetinaFace](https://github.com/deepinsight/insightface/tree/master/RetinaFace)  
+
+For this project, in order to facilitate the technical exchange of developers, we created QQ group: 1121178835, welcome to join.  
 
 In addition to the open-source silent living detection algorithm, Minivision technology also has a number of self-developed algorithms and SDK related to face recognition and human body recognition. Interested individual developers or enterprise developers can visit our website: [Mini-AI Open Platform](https://ai.minivision.cn/)
-Welcome to contact us, QQ group: 1121178835.
+Welcome to contact us.

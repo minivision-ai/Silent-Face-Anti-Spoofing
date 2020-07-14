@@ -88,6 +88,8 @@ python train.py --device_ids 0  --patch_info your_patch
  python test.py --image_name your_image_name
  ```    
 ## 参考  
-- 检测器 [RetinaFace](https://github.com/deepinsight/insightface/tree/master/RetinaFace)
+- 检测器 [RetinaFace](https://github.com/deepinsight/insightface/tree/master/RetinaFace)  
 
-除了本次开源的的静默活体检测算法外，小视科技还拥有多项人脸识别、人体识别相关的自研算法及SDK。有兴趣的个人开发者或企业开发者可登录[小视科技Mini-AI开放平台](https://ai.minivision.cn/)了解和联系我们，交流QQ群：1121178835。
+针对此项目，为了方便开发者们的技术交流，创建了QQ群：1121178835，欢迎加入。  
+
+除了本次开源的的静默活体检测算法外，小视科技还拥有多项人脸识别、人体识别相关的自研算法及商用SDK。有兴趣的个人开发者或企业开发者可登录[小视科技Mini-AI开放平台](https://ai.minivision.cn/)了解和联系我们。
