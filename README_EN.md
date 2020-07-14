@@ -2,7 +2,7 @@
 ![Silent-Face-Anti-Spoofing](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/logo.jpg)  
 # Silent-Face-Anti-Spoofing 
 
-This project is Silent-Face-Anti-Spoofing belongs to [minivision technology](https://www.minivision.cn/). You can scan the QR code below to get APK and install it on Android side to experience the effect of real time living detection(silent face anti-spoofing detection).
+This project is Silent-Face-Anti-Spoofing belongs to [minivision technology](https://www.minivision.cn/). You can scan the QR code below to get APK and install it on Android side to experience the effect of real time living detection(silent face anti-spoofing detection).  
 <img src="https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/静默活体APK.jpeg" width="200" height="200" align=center />  
 You can also go to our AI open platform for online experience: https://ai.minivision.cn/#/coreability/livedetection  
 
