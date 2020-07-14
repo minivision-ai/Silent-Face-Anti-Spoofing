@@ -13,7 +13,7 @@ The main purpose of silent face anti-spoofing detection technology is to judge w
 
 Since the Fourier spectrum can reflect the difference of true and false faces in frequency domain to a certain extent, we adopt a silent living detection method based on the auxiliary supervision of Fourier spectrum. The model architecture consists of the main classification branch and the auxiliary supervision branch of Fourier spectrum. The overall architecture is shown in the following figure:
 
-![overall architecture](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/framework.jpeg)  
+![overall architecture](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/framework.jpg)  
 
 By using our self-developed model pruning method, the FLOPs of MobileFaceNet is reduced from 0.224G to 0.081G, and the performance of the model is significantly improved (the amount of calculation and parameters is reduced) with little loss of precision.
 
