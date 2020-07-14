@@ -13,13 +13,15 @@ import numpy as np
 import torch.nn.functional as F
 
 
-from src.model_lib.MobileFaceNetPruned import MobileFaceNetPv4, MobileFaceNetPv1
+from src.model_lib.MiniFASNet import MiniFASNetV1, MiniFASNetV2,MiniFASNetV1SE,MiniFASNetV2SE
 from src.data_io import transform as trans
 from src.utility import get_kernel, parse_model_name
 
 MODEL_MAPPING = {
-    'MobileFaceNetPv4': MobileFaceNetPv4,
-    'MobileFaceNetPv1': MobileFaceNetPv1
+    'MiniFASNetV1': MiniFASNetV1,
+    'MiniFASNetV2': MiniFASNetV2,
+    'MiniFASNetV1SE':MiniFASNetV1SE,
+    'MiniFASNetV2SE':MiniFASNetV2SE
 }
 
 

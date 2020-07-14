@@ -21,24 +21,22 @@ warnings.filterwarnings('ignore')
 SAMPLE_IMAGE_PATH = "./images/sample/"
 
 
-# 用于测试的图片应该从实时视频流中截取,而且宽高比为3:4
+# 因为安卓端APK获取的视频流宽高比为3:4,为了与之一致，所以将宽高比限制为3:4
 def check_image(image):
     height, width, channel = image.shape
     if width/height != 3/4:
         print("Image is not appropriate!!!\nHeight/Width should be 4/3.")
-        return None
-    elif width != 480:
-        print("Resize image {}x{} to 480x640.".format(width,height))
-        image = cv2.resize(image,(480,640))
-    return image
+        return False
+    else:
+        return True
 
 
 def test(image_name, model_dir, device_id):
     model_test = AntiSpoofPredict(device_id)
     image_cropper = CropImage()
     image = cv2.imread(SAMPLE_IMAGE_PATH + image_name)
-    image = check_image(image)
-    if image is None:
+    result = check_image(image)
+    if result is False:
         return
     image_bbox = model_test.get_bbox(image)
     prediction = np.zeros((1, 3))
@@ -105,7 +103,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--image_name",
         type=str,
-        default="image_T1.jpg",
+        default="image_F1.jpg",
         help="image used to test")
     args = parser.parse_args()
     test(args.image_name, args.model_dir, args.device_id)

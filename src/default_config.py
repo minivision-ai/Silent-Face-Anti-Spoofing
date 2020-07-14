@@ -36,7 +36,8 @@ def get_default_config():
     conf.ft_width = 10
 
     # dataset
-    conf.train_root_path = './datasets/rgb_image'
+    conf.train_root_path = '/ssd/data/recognize_data/LiveBody/Train/new_patches'
+    # conf.train_root_path = './datasets/rgb_image'
 
     # save file path
     conf.snapshot_dir_path = './saved_logs/snapshot'
