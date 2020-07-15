@@ -27,7 +27,6 @@ class FTGenerator(nn.Module):
             nn.ReLU(inplace=True)
         )
 
-
     def forward(self, x):
         return self.ft(x)
 
