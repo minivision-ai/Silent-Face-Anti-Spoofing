@@ -61,5 +61,5 @@ def generate_FT(image):
             maxx = max(fimg[i])
         if minn > min(fimg[i]):
             minn = min(fimg[i])
-    fimg = (fimg - minn+1) // (maxx - minn+1)
+    fimg = (fimg - minn+1) / (maxx - minn+1)
     return fimg
