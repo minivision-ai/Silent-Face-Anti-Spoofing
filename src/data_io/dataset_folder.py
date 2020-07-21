@@ -50,7 +50,7 @@ class DatasetFolderFT(datasets.ImageFolder):
 
 
 def generate_FT(image):
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     f = np.fft.fft2(image)
     fshift = np.fft.fftshift(f)
     fimg = np.log(np.abs(fshift)+1)
