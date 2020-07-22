@@ -31,13 +31,9 @@ def get_default_config():
     conf.num_classes = 3
     conf.input_channel = 3
     conf.embedding_size = 128
-    # resize fourier image size
-    conf.ft_height = 10
-    conf.ft_width = 10
 
     # dataset
-    conf.train_root_path = '/ssd/data/recognize_data/LiveBody/Train/new_patches'
-    # conf.train_root_path = './datasets/rgb_image'
+    conf.train_root_path = './datasets/rgb_image'
 
     # save file path
     conf.snapshot_dir_path = './saved_logs/snapshot'
@@ -60,6 +56,9 @@ def update_config(args, conf):
     conf.kernel_size = get_kernel(h_input, w_input)
     conf.device = "cuda:{}".format(conf.devices[0]) if torch.cuda.is_available() else "cpu"
 
+    # resize fourier image size
+    conf.ft_height = 2*conf.kernel_size[0]
+    conf.ft_width = 2*conf.kernel_size[1]
     current_time = datetime.now().strftime('%b%d_%H-%M-%S')
     job_name = 'Anti_Spoofing_{}'.format(args.patch_info)
     log_path = '{}/{}/{} '.format(conf.log_path, job_name, current_time)
