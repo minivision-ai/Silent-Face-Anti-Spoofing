@@ -57,7 +57,7 @@ def update_config(args, conf):
     conf.patch_info = args.patch_info
     w_input, h_input = get_width_height(args.patch_info)
     conf.input_size = [h_input, w_input]
-    conf.kernel_size = get_kernel(w_input, h_input)
+    conf.kernel_size = get_kernel(h_input, w_input)
     conf.device = "cuda:{}".format(conf.devices[0]) if torch.cuda.is_available() else "cpu"
 
     current_time = datetime.now().strftime('%b%d_%H-%M-%S')
