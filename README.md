@@ -3,6 +3,8 @@
 # 静默活体检测 (Silent-Face-Anti-Spoofing)   
 该项目为[小视科技](https://www.minivision.cn/)的静默活体检测项目,您可以扫描下方的二维码获取安卓端APK,体验静默活体的检测效果.   
 <img src="https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/静默活体APK.jpeg" width="200" height="200" align=center />  
+## 更新  
+**2020-07-30:** 开源caffe模型，分享工业级静默活体检测算法技术解析直播视频以及相关文件。
 ## 简介
 在本工程中我们开源了活体模型训练架构，数据预处理方法，模型训练和测试脚本以及开源的APK供大家测试使用。  
 
@@ -95,7 +97,13 @@ python train.py --device_ids 0  --patch_info your_patch
  ./images/sample 测试图片  
  ```
  python test.py --image_name your_image_name
- ```    
+ ```      
+## 相关资源  
+[百度网盘](https://pan.baidu.com/s/1u3BPHIEU4GmTti0G3LIDGQ)提取码：6d8q
+(1)工业级静默活体检测开源算法技术解析[直播回放视频](https://www.bilibili.com/video/BV1qZ4y1T7CH);  
+(2)直播视频中的思维导图文件，存放在files目录下;  
+(3)开源模型的caffemodel，存放在models目录下;  
+
 ## 参考  
 - 检测器 [RetinaFace](https://github.com/deepinsight/insightface/tree/master/RetinaFace)  
 
