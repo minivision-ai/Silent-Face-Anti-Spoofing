@@ -99,7 +99,7 @@ python train.py --device_ids 0  --patch_info your_patch
  python test.py --image_name your_image_name
  ```      
 ## 相关资源  
-[百度网盘](https://pan.baidu.com/s/1u3BPHIEU4GmTti0G3LIDGQ)提取码：6d8q
+[百度网盘](https://pan.baidu.com/s/1u3BPHIEU4GmTti0G3LIDGQ)提取码：6d8q  
 (1)工业级静默活体检测开源算法技术解析[直播回放视频](https://www.bilibili.com/video/BV1qZ4y1T7CH);  
 (2)直播视频中的思维导图文件，存放在files目录下;  
 (3)开源模型的caffemodel，存放在models目录下;  
