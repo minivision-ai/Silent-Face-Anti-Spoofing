@@ -70,7 +70,7 @@ def test(image_name, model_dir, device_id):
         print("Image '{}' is Fake Face. Score: {:.2f}.".format(image_name, value))
         result_text = "FakeFace Score: {:.2f}".format(value)
         color = (0, 0, 255)
-    print("Prediction cost {:.2f} ms".format(test_speed))
+    print("Prediction cost {:.2f} s".format(test_speed))
     cv2.rectangle(
         image,
         (image_bbox[0], image_bbox[1]),
