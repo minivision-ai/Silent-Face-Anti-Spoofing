@@ -1,5 +1,5 @@
 easydict==1.9
-numpy==1.17.0
+numpy==1.22.0
 tqdm==4.31.1
 torchvision==0.4.0
 torch==1.2.0
