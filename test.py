@@ -31,10 +31,11 @@ def check_image(image):
         return True
 
 
-def test(image_name, model_dir, device_id):
+def test(image, model_dir, device_id):
     model_test = AntiSpoofPredict(device_id)
     image_cropper = CropImage()
-    image = cv2.imread(SAMPLE_IMAGE_PATH + image_name)
+    # image = cv2.imread(SAMPLE_IMAGE_PATH + image_name)
+    image = cv2.resize(image, (int(image.shape[0] * 3 / 4), image.shape[0]))
     result = check_image(image)
     if result is False:
         return
@@ -62,29 +63,8 @@ def test(image_name, model_dir, device_id):
     # draw result of prediction
     label = np.argmax(prediction)
     value = prediction[0][label]/2
-    if label == 1:
-        print("Image '{}' is Real Face. Score: {:.2f}.".format(image_name, value))
-        result_text = "RealFace Score: {:.2f}".format(value)
-        color = (255, 0, 0)
-    else:
-        print("Image '{}' is Fake Face. Score: {:.2f}.".format(image_name, value))
-        result_text = "FakeFace Score: {:.2f}".format(value)
-        color = (0, 0, 255)
-    print("Prediction cost {:.2f} s".format(test_speed))
-    cv2.rectangle(
-        image,
-        (image_bbox[0], image_bbox[1]),
-        (image_bbox[0] + image_bbox[2], image_bbox[1] + image_bbox[3]),
-        color, 2)
-    cv2.putText(
-        image,
-        result_text,
-        (image_bbox[0], image_bbox[1] - 5),
-        cv2.FONT_HERSHEY_COMPLEX, 0.5*image.shape[0]/1024, color)
 
-    format_ = os.path.splitext(image_name)[-1]
-    result_image_name = image_name.replace(format_, "_result" + format_)
-    cv2.imwrite(SAMPLE_IMAGE_PATH + result_image_name, image)
+    return label
 
 
 if __name__ == "__main__":
