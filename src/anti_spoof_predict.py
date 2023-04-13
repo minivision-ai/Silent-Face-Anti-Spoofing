@@ -6,6 +6,8 @@
 # @Software : PyCharm
 
 import os
+import traceback
+
 import cv2
 import math
 import torch
@@ -27,8 +29,12 @@ MODEL_MAPPING = {
 
 class Detection:
     def __init__(self):
-        caffemodel = "./resources/detection_model/Widerface-RetinaFace.caffemodel"
-        deploy = "./resources/detection_model/deploy.prototxt"
+        stack = traceback.extract_stack()
+        dirname = os.path.dirname(stack[-2].filename)
+
+        caffemodel = os.path.join(dirname, '..', 'resources', 'detection_model', 'Widerface-RetinaFace.caffemodel')
+        deploy = os.path.join(dirname, '..', 'resources', 'detection_model', 'deploy.prototxt')
+
         self.detector = cv2.dnn.readNetFromCaffe(deploy, caffemodel)
         self.detector_confidence = 0.6
 
@@ -90,6 +96,7 @@ class AntiSpoofPredict(Detection):
             result = self.model.forward(img)
             result = F.softmax(result).cpu().numpy()
         return result
+
 
 
 
