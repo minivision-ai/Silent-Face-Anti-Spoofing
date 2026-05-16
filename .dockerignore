@@ -1,0 +1,7 @@
+.git
+.venv
+__pycache__
+*.pyc
+saved_logs
+datasets
+.idea

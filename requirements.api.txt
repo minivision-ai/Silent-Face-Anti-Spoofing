@@ -1,0 +1,11 @@
+easydict
+numpy
+tqdm
+torchvision
+torch
+opencv-python-headless
+Pillow
+tensorboardX
+fastapi
+uvicorn[standard]
+python-multipart
