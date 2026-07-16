@@ -14,7 +14,7 @@ import torch.nn.functional as F
 
 
 from src.model_lib.MiniFASNet import MiniFASNetV1, MiniFASNetV2,MiniFASNetV1SE,MiniFASNetV2SE
-from src.data_io import transform as trans
+from src.data_io.transform import ToTensor
 from src.utility import get_kernel, parse_model_name
 
 MODEL_MAPPING = {
@@ -79,10 +79,7 @@ class AntiSpoofPredict(Detection):
         return None
 
     def predict(self, img, model_path):
-        test_transform = trans.Compose([
-            trans.ToTensor(),
-        ])
-        img = test_transform(img)
+        img = ToTensor()(img)
         img = img.unsqueeze(0).to(self.device)
         self._load_model(model_path)
         self.model.eval()

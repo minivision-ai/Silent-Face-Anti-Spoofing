@@ -9,10 +9,11 @@
 default config for training
 """
 
+import os
 import torch
 from datetime import datetime
 from easydict import EasyDict
-from src.utility import make_if_not_exist, get_width_height, get_kernel
+from src.utility import get_width_height, get_kernel
 
 
 def get_default_config():
@@ -45,12 +46,16 @@ def get_default_config():
     # save model/iter
     conf.save_every = 30
 
+    # path to a checkpoint (or bare model weights) to resume/fine-tune from
+    conf.resume = None
+
     return conf
 
 
 def update_config(args, conf):
     conf.devices = args.devices
     conf.patch_info = args.patch_info
+    conf.resume = args.resume
     w_input, h_input = get_width_height(args.patch_info)
     conf.input_size = [h_input, w_input]
     conf.kernel_size = get_kernel(h_input, w_input)
@@ -64,8 +69,8 @@ def update_config(args, conf):
     log_path = '{}/{}/{} '.format(conf.log_path, job_name, current_time)
     snapshot_dir = '{}/{}'.format(conf.snapshot_dir_path, job_name)
 
-    make_if_not_exist(snapshot_dir)
-    make_if_not_exist(log_path)
+    os.makedirs(snapshot_dir, exist_ok=True)
+    os.makedirs(log_path, exist_ok=True)
 
     conf.model_path = snapshot_dir
     conf.log_path = log_path

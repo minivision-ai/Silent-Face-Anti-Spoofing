@@ -6,7 +6,6 @@
 # @Software : PyCharm
 
 from datetime import datetime
-import os
 
 
 def get_time():
@@ -34,8 +33,3 @@ def parse_model_name(model_name):
     else:
         scale = float(info[0])
     return int(h_input), int(w_input), model_type, scale
-
-
-def make_if_not_exist(folder_path):
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
